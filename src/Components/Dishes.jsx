@@ -48,8 +48,9 @@ function Dishes() {
           <div
           style={{translate:`-${value}px`}}
           className={`flex gap-5 mt-2 mb-1 duration-700`}>
-            {Data.map((item) => (
+            {Data.map((item,i) => (
               <img
+                key={i}
                 className="w-29 "
                 src={`https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_288,h_360/${item.imageId}`}
               />
