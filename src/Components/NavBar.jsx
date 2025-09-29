@@ -32,41 +32,41 @@ function NavBar() {
 
                         <div className="flex gap-2 items-center">
 
-                            <i class="fi fi-rs-shopping-bag"></i>
+                            <i className="fi fi-rs-shopping-bag"></i>
                             <p className="mb-[2px] hover:text-[#fe5200]">Swiggy Corporate</p>
 
                         </div>
 
                         <div className='flex gap-2 items-center hover:text-[#fe5200]'>
 
-                            <i class="fi fi-br-search"></i>
+                            <i className="fi fi-br-search"></i>
                             <p className="mb-[2px]">Search</p>
 
                         </div>
 
                         <div className='flex gap-2 items-center hover:text-[#fe5200]'>
 
-                            <i class="fi fi-rr-badge-percent"></i>
+                            <i className="fi fi-rr-badge-percent"></i>
                             <p className="mb-[2px]">Offers</p>
 
                         </div>
 
                         <div className='flex gap-2 items-center hover:text-[#fe5200]'>
 
-                            <i class="fi fi-sr-life-ring"></i>
+                            <i className="fi fi-sr-life-ring"></i>
                             <p className="mb-[2px]">Help</p>
 
                         </div>
 
                         <div className='flex gap-2 items-center hover:text-[#fe5200]'>
 
-                            <i class="fi fi-rs-user"></i>
+                            <i className="fi fi-rs-user"></i>
                             <p className="mb-[2px]">Sign In</p>
 
                         </div>
 
                         <div className='flex gap-2 items-center hover:text-[#fe5200]'>
-                            <i class="fi fi-br-shopping-cart"></i>
+                            <i className="fi fi-br-shopping-cart"></i>
                             <p className="mb-[2px]">Cart</p>
 
                         </div>
