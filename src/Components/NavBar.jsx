@@ -1,6 +1,35 @@
 import React from "react";
 
 function NavBar() {
+
+    const navItems = [
+        {
+            "Name": "Swiggy Corporate",
+            "Icon": "fi-rs-shopping-bag",
+        },
+        {
+            "Name": "Search",
+            "Icon": "fi-br-search",
+        },
+        {
+            "Name": "Offers",
+            "Icon": "fi-rr-badge-percent",
+        },
+        {
+            "Name": "Help",
+            "Icon": "fi-sr-life-ring",
+        },
+        {
+            "Name": "Sign in",
+            "Icon": "fi-rs-user",
+        },
+        {
+            "Name": "Cart",
+            "Icon": "fi-br-shopping-cart",
+        }
+        
+    ]
+
     return (
         <>
             <div className="w-full h-[65px] shadow-md flex justify-center ">
@@ -23,53 +52,16 @@ function NavBar() {
                     </div>
 
 
-
-
-
-
-
                     <div className="flex  h-[100%] items-center w-[63%] justify-between font-bold text-[13px] " >
 
-                        <div className="flex gap-2 items-center">
-
-                            <i className="fi fi-rs-shopping-bag"></i>
-                            <p className="mb-[2px] hover:text-[#fe5200]">Swiggy Corporate</p>
-
-                        </div>
-
-                        <div className='flex gap-2 items-center hover:text-[#fe5200]'>
-
-                            <i className="fi fi-br-search"></i>
-                            <p className="mb-[2px]">Search</p>
-
-                        </div>
-
-                        <div className='flex gap-2 items-center hover:text-[#fe5200]'>
-
-                            <i className="fi fi-rr-badge-percent"></i>
-                            <p className="mb-[2px]">Offers</p>
-
-                        </div>
-
-                        <div className='flex gap-2 items-center hover:text-[#fe5200]'>
-
-                            <i className="fi fi-sr-life-ring"></i>
-                            <p className="mb-[2px]">Help</p>
-
-                        </div>
-
-                        <div className='flex gap-2 items-center hover:text-[#fe5200]'>
-
-                            <i className="fi fi-rs-user"></i>
-                            <p className="mb-[2px]">Sign In</p>
-
-                        </div>
-
-                        <div className='flex gap-2 items-center hover:text-[#fe5200]'>
-                            <i className="fi fi-br-shopping-cart"></i>
-                            <p className="mb-[2px]">Cart</p>
-
-                        </div>
+                        {
+                            navItems.map((item) => (
+                                <div className='flex gap-2 items-center hover:text-[#fe5200]'>
+                                    <i className={`fi ${item.Icon}`}></i>
+                                    <p className="mb-[2px]">{item.Name}</p>
+                                </div>
+                            ))
+                        }
                     </div>
                 </div>
             </div>
