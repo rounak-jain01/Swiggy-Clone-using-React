@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Dishes from "./Dishes";
 import TopRestaurants from "./TopRestaurants";
+import DeliverFood from "./DeliverFood";
 
 function Body() {
   const [DishesData, setDishesData] = useState([]);
@@ -13,10 +14,7 @@ function Body() {
     );
 
     const result = await response.json();
-    console.log(
-      result?.data?.cards[1]?.card?.card?.gridElements?.infoWithStyle
-        ?.restaurants
-    );
+    
     setDishesData(result?.data?.cards[0]?.card?.card?.imageGridCards?.info);
 
     setRestaurantData(
@@ -31,9 +29,10 @@ function Body() {
 
   return (
     <div className="w-full h-screen">
-      <div className="w-[80%] h-[100%] p-2 px-4 mx-auto overflow-hidden gap-20">
+      <div className="w-[80%] ] h-[100%] p-2 px-4 mx-auto overflow-hidden gap-20">
         <Dishes Data={DishesData} />
         <TopRestaurants data={restaurantData} />
+        {/* <DeliverFood/> */}
       </div>
     </div>
   );

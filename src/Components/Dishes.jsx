@@ -22,7 +22,7 @@ function Dishes({Data}) {
             className={
               `fi fi-rr-arrow-small-left rounded-full h-7 w-7 flex justify-center items-center ` +
               (value <= 0
-                ? "bg-gray-300 cursor-not-allowed text-gray-200"
+                ? "bg-gray-200 cursor-not-allowed text-black/50"
                 : "bg-gray-300 cursor-pointer")
             }
           ></i>
@@ -31,7 +31,7 @@ function Dishes({Data}) {
             className={
               `fi fi-rr-arrow-small-right rounded-full h-7 w-7 flex justify-center items-center ` +
               (value >= 1750
-                ? "bg-gray-300 text-gray-200 cursor-not-allowed"
+                ? "bg-gray-300 text-black/50 cursor-not-allowed"
                 : "bg-gray-300 cursor-pointer")
             }
           ></i>
