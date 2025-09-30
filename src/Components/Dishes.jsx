@@ -1,21 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, {useState } from "react";
 
-function Dishes() {
-  const [Data, setData] = useState([]);
+function Dishes({Data}) {
   const [value, setvalue] = useState(0);
-
-  async function fetchDishesData() {
-    const response = await fetch(
-      "/api/dapi/restaurants/list/v5?lat=12.97530&lng=77.59100&is-seo-homepage-enabled=true&page_type=DESKTOP_WEB_LISTING"
-    );
-
-    const result = await response.json();
-    setData(result?.data?.cards[0]?.card?.card?.imageGridCards?.info);
-  }
-
-  useEffect(() => {
-    fetchDishesData();
-  }, []);
 
   function moveNext() {
     value >= 1750 ? "" : setvalue((prev) => prev + 350);

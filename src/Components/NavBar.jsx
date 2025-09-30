@@ -55,8 +55,8 @@ function NavBar() {
                     <div className="flex  h-[100%] items-center w-[63%] justify-between font-bold text-[13px] " >
 
                         {
-                            navItems.map((item) => (
-                                <div className='flex gap-2 items-center hover:text-[#fe5200]'>
+                            navItems.map((item,i) => (
+                                <div key={i} className='flex gap-2 items-center hover:text-[#fe5200]'>
                                     <i className={`fi ${item.Icon}`}></i>
                                     <p className="mb-[2px]">{item.Name}</p>
                                 </div>
