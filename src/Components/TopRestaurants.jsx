@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import RestaurantCards from "./RestaurantCards";
 
-function TopRestaurants({ data }) {
+function TopRestaurants({data}) {
   const [value, setvalue] = useState(0);
 
   function moveNext() {
@@ -13,7 +13,7 @@ function TopRestaurants({ data }) {
   }
 
   return (
-    <div className="">
+    <>
       <div className="flex justify-between mt-8 h-full ">
         <div className="font-extrabold text-[16px]">
           <h1>Top restaurant chains in Bangalore</h1>
@@ -40,15 +40,16 @@ function TopRestaurants({ data }) {
         </div>
       </div>
 
-      <div className="flex gap-6 mt-3">
+      <div className="flex gap-6 mt-3 w-full duration-700"
+      style={{ translate: `-${value}px` }}>
         {data.map(({ info }, i) => (
           <div className="hover:scale-95 duration-200">
-
-          <RestaurantCards info={info} value={value} key={i} />
+            <RestaurantCards info={info} />
           </div>
         ))}
       </div>
-    </div>
+      <hr className="mt-10 border-gray-300" />
+    </>
   );
 }
 

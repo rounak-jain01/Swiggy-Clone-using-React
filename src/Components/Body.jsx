@@ -14,7 +14,6 @@ function Body() {
     );
 
     const result = await response.json();
-    
     setDishesData(result?.data?.cards[0]?.card?.card?.imageGridCards?.info);
 
     setRestaurantData(
@@ -23,17 +22,18 @@ function Body() {
     );
   }
 
+
   useEffect(() => {
     fetchData();
   }, []);
 
   return (
-    <div className="w-full h-screen">
-      <div className="w-[80%] ] h-[100%] p-2 px-4 mx-auto overflow-hidden gap-20">
+    <div className="w-full">
+      <div className="w-[80%] h-full p-2 px-4 mx-auto overflow-x-hidden gap-20">
         <Dishes Data={DishesData} />
         <TopRestaurants data={restaurantData} />
-        {/* <DeliverFood/> */}
-      </div>
+        <DeliverFood rdata={restaurantData}/>
+      </div>  
     </div>
   );
 }
