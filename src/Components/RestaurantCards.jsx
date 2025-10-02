@@ -1,8 +1,9 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
-function RestaurantCards({ info }) {
+function RestaurantCards({info, link}) {
   return (
-    <>
+    <Link to={`/restaurantMenu/${link.split("/").at(-1)} `}>
       <div className="min-w-[210px] h-[140px] cursor-pointer relative">
         <img
           className="w-full h-full object-cover rounded-2xl"
@@ -16,7 +17,7 @@ function RestaurantCards({ info }) {
               ? info?.aggregatedDiscountInfoV3?.header
               : ""
           } ${
-            info?.aggregatedDiscountInfoV3
+            info?.aggregatedDiscountInfoV3?.subHeader
               ? info?.aggregatedDiscountInfoV3?.subHeader
               : ""
           }`}
@@ -33,7 +34,7 @@ function RestaurantCards({ info }) {
         )}`}</p>
         <p className="line-clamp-1 text-[12px] text-black/50">{`${info?.areaName}`}</p>
       </div>
-    </>
+    </Link>
   );
 }
 

@@ -4,3 +4,7 @@
   background-color: #121212;
   color: white;
 } */
+
+*{
+  box-sizing: border-box;
+}

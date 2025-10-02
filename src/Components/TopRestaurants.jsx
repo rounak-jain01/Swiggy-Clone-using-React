@@ -3,7 +3,6 @@ import RestaurantCards from "./RestaurantCards";
 
 function TopRestaurants({data}) {
   const [value, setvalue] = useState(0);
-
   function moveNext() {
     setvalue((prev) => prev + 500);
   }
@@ -42,9 +41,9 @@ function TopRestaurants({data}) {
 
       <div className="flex gap-6 mt-3 w-full duration-700"
       style={{ translate: `-${value}px` }}>
-        {data.map(({ info }, i) => (
+        {data.map(({ info, cta : {link}}) => (
           <div className="hover:scale-95 duration-200">
-            <RestaurantCards info={info} />
+            <RestaurantCards info={info} link={link} />
           </div>
         ))}
       </div>

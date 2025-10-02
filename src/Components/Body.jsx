@@ -8,7 +8,7 @@ function Body() {
 
   const [restaurantData, setRestaurantData] = useState([]);
 
-  async function fetchData() {
+  async function fetchData() { 
     const response = await fetch(
       "/api/dapi/restaurants/list/v5?lat=12.97530&lng=77.59100&is-seo-homepage-enabled=true&page_type=DESKTOP_WEB_LISTING"
     );
@@ -35,6 +35,7 @@ function Body() {
         <DeliverFood rdata={restaurantData}/>
       </div>  
     </div>
+    
   );
 }
 
