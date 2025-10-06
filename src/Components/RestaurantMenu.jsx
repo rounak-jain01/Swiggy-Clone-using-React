@@ -23,9 +23,8 @@ function RestaurantMenu() {
 
     let actualrData =
       (result?.data?.cards[4]?.groupedCard?.cardGroupMap?.REGULAR?.cards).filter(
-        (item) => item?.card?.card?.itemCards
+        (item) => item?.card?.card?.itemCards || item?.card?.card?.categories
       );
-
     setrData(actualrData);
     setOrderData(result?.data?.cards[2]?.card?.card?.info);
     setOfferData(
@@ -61,7 +60,7 @@ function RestaurantMenu() {
           </p>
         </div>
 
-        <div className="border">
+        <div className="">
           <div className="mt-4 mx-3 text-[22px] font-bold">
             <h1>{orderData?.name}</h1>
           </div>
@@ -150,93 +149,127 @@ function RestaurantMenu() {
 
           <hr className="text-slate-300 my-5" />
 
-          {/* <div className="">
-            {rData.map(
-              (
-                {
-                  card: {
-                    card: { title, itemCards },
-                  },
-                },
-                i
-              ) => (
-                <div key={i}>
-                  <div>
-                    <div className="flex justify-between">
-                      {title} ({itemCards.length})
-                      <i
-                        class="fi fi-br-angle-small-up"
-                        onClick={togglearrow}
-                      ></i>
-                    </div>
-                    <div className="duration-5000 ease-in">
-                      {arrowId && (
-                        <div className="m-3 ">
-                          {itemCards.map(({ card: { info } }) => (
-                            <p>{info?.name}</p>
-                          ))}
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              )
-            )}
-          </div> */}
-
-          <div>
-            {rData.map(
-              ({
-                card: {
-                  card: { title, itemCards },
-                },
-              }) => (
-                <MenuCard title={title} itemCards={itemCards} />
-              )
-            )}
+          <div className="px-4">
+            {rData.map(({ card: { card } }) => (
+              <MenuCard card={card} />
+            ))}
           </div>
         </div>
       </div>
     </div>
   );
 }
-
-function MenuCard({ title, itemCards }) {
-
-  const [arrowId, setarrowId] = useState(true);
-
-
-  function togglearrow(){
-    setarrowId((prev) => !prev)
+function MenuCard({ card }) {
+  let isOpen = false;
+  if (card["@type"]) {
+    isOpen = true;
   }
-  return (
-    <>
-      <div>
-        <div>
-          <h1>
+
+  const [arrowId, setarrowId] = useState(isOpen);
+
+  function togglearrow() {
+    setarrowId((prev) => !prev);
+  }
+
+  // console.log(card );
+  if (card.itemCards) {
+    const { title, itemCards } = card;
+    console.log(card);
+    return (
+      <>
+        <div className="flex justify-between text-sm">
+          <h1 className="font-bold">
             {title} ({itemCards?.length})
           </h1>
-          <i className="fi fi-br-angle-small-up" onClick={togglearrow}></i>
+          <i
+            className={`fi fi-br-angle-small-${arrowId ? "up" : "down"}`}
+            onClick={togglearrow}
+          ></i>
         </div>
-        {arrowId && <Menu itemCards={itemCards} />
-        }
-      </div>
-    </>
-  );
+        {arrowId && <Menu itemCards={itemCards} />}
+        <hr className="border-5 border-slate-200 my-4 rounded-[3px]" />
+      </>
+    );
+  } else {
+    const { title, categories } = card;
+    return (
+      <>
+        <h1 className="font-bold">{title}</h1>
+        <div className="my-4">
+          {categories.map((data) => (
+            <MenuCard card={data} />
+          ))}
+        </div>
+      </>
+    );
+  }
 }
 
-function Menu({itemCards}){
+function Menu({ itemCards }) {
+  console.log(itemCards);
   return (
     <>
-    {
-      itemCards.map(({card : {info}}) => (
-        <div>
-          <p>{info?.name}</p>
-        </div>
-      ))
-    }
+      {itemCards.map(
+        ({
+          card: {
+            info: {
+              name,
+              imageId,
+              description,
+              itemAttribute: { vegClassifier },
+              price,
+              ratings: {
+                aggregatedRating: { rating, ratingCountV2 },
+              },
+            },
+          },
+        }) => (
+          <div className="border-b flex justify-between py-8">
+            <div className="w-[70%] font-semibold">
+              <div>
+                {vegClassifier === "VEG" ? (
+                  <p>
+                    <img
+                      src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b2/Veg_symbol.svg/800px-Veg_symbol.svg.png"
+                      className="w-4"
+                      alt=""
+                    />
+                  </p>
+                ) : (
+                  <p>
+                    <img
+                      src="https://tse4.mm.bing.net/th/id/OIP.w6vZA1LU2oGl4vbu1Q2BxQHaH0?cb=12&rs=1&pid=ImgDetMain&o=7&rm=3"
+                      alt=""
+                      className="w-4"
+                    />
+                  </p>
+                )}
+              </div>
+              <p>{name}</p>
+              <p>₹{price / 100}</p>
+              {
+                rating ? <span className="flex gap-1 text-[12px] text-normal">
+                <i className="fi fi-ss-star text-green-600"></i> <p className="text-green-600">{rating}</p>{" "}
+                <p>({ratingCountV2})</p>
+              </span> : ""
+              }
+              
+              <p className="text-slate-700 text-[12px]">{description}</p>
+            </div>
+            <div className="w-[30%] relative flex justify-center">
+              <div className="flex items-end flex-col">
+
+                <img className= "rounded-xl w-[60%] aspect-square "
+                  src={`https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_300,h_300,c_fit/${imageId}`}
+                  />
+                  </div>
+                <h1 className="absolute bottom-[-5px] right-[15px] bg-white px-6 py-1 rounded-xl font-bold text-green-600 ">ADD</h1>
+            </div>
+          </div>
+        )
+      )}
     </>
-  )
+  );
 }
 
 function OfferCard({ item: { info } }) {
