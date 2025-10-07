@@ -32,7 +32,7 @@ function NavBar() {
 
   return (
     <>
-      <div className="w-full h-[65px] shadow-md flex justify-center ">
+      <div className="w-full h-[65px] sticky top-0 bg-white z-40 shadow-md flex justify-center ">
         <div className="w-[81%] flex justify-between items-center">
           <div className="flex items-center">
             <div>

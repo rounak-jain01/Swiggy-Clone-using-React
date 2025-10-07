@@ -6,10 +6,8 @@ function RestaurantMenu() {
   const [orderData, setOrderData] = useState([]);
   const [offerData, setOfferData] = useState([]);
   const [rData, setrData] = useState([]);
+  const [TopPicks, setTopPicks] = useState(null);
   const [value, setvalue] = useState(0);
-  const [arrowId, setarrowId] = useState(true);
-
-  // const [rMenu, setrMenu] = useState([]);
 
   async function fetchRestData() {
     const data = await fetch(
@@ -30,8 +28,12 @@ function RestaurantMenu() {
     setOfferData(
       result?.data?.cards[3]?.card?.card?.gridElements?.infoWithStyle?.offers
     );
+    setTopPicks(
+      result?.data?.cards[4]?.groupedCard?.cardGroupMap?.REGULAR?.cards.filter(
+        (item) => item?.card?.card?.title == "Top Picks"
+      )[0]
+    );
   }
-
   useEffect(() => {
     fetchRestData();
   }, []);
@@ -39,10 +41,6 @@ function RestaurantMenu() {
   function moveNext() {}
 
   function moveBack() {}
-
-  function togglearrow() {
-    setarrowId((prev) => !prev);
-  }
 
   return (
     <div className="w-full mt-4">
@@ -107,6 +105,7 @@ function RestaurantMenu() {
             </div>
           </div>
 
+          {/* Deals for You section */}
           <div>
             <div className="flex justify-between mt-5 h-full ">
               <div className="font-bold text-[16px] pl-3">
@@ -140,6 +139,7 @@ function RestaurantMenu() {
             </div>
           </div>
 
+          {/* Search Section */}
           <div className="flex flex-col items-center mt-7 gap-4 w-full">
             <h1 className="font-bold text-[11px] text-slate-700">M E N U</h1>
             <div className="bg-slate-100 rounded-lg text-[14px] text-slate-800 items-center p-2 w-full flex justify-center cursor-pointer">
@@ -148,6 +148,63 @@ function RestaurantMenu() {
           </div>
 
           <hr className="text-slate-300 my-5" />
+
+          {/* Top picks Section */}
+
+          {TopPicks && (
+            <div className="w-full overflow-hidden">
+              <div className="flex  justify-between mt-5 h-full ">
+                <div className="font-bold text-[16px] pl-3">
+                  <h1>{TopPicks?.card?.card?.title}</h1>
+                </div>
+                <div className="flex gap-2">
+                  <i
+                    onClick={moveBack}
+                    className={
+                      `fi fi-rr-arrow-small-left rounded-full h-7 w-7 flex justify-center items-center ` +
+                      (value <= 0
+                        ? "bg-gray-200 cursor-not-allowed text-black/50"
+                        : "bg-gray-300 cursor-pointer")
+                    }
+                  ></i>
+                  <i
+                    onClick={moveNext}
+                    className={
+                      `fi fi-rr-arrow-small-right rounded-full h-7 w-7 flex justify-center items-center ` +
+                      (value >= 1750
+                        ? "bg-gray-300 text-black/50 cursor-not-allowed"
+                        : "bg-gray-300 cursor-pointer")
+                    }
+                  ></i>
+                </div>
+              </div>
+              <div className="flex gap-3 mt-5">
+                {TopPicks?.card?.card?.carousel.map(
+                  ({
+                    creativeId,
+                    dish: {
+                      info: { defaultPrice },
+                    },
+                  }) => (
+                    <div className="min-w-[240px] relative">
+                      <img
+                        className=""
+                        src={`https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_292,h_300/${creativeId}`}/>
+
+                      <div className="absolute bottom-5 text-white font-bold left-2 text-sm ">
+                        <p>₹ {defaultPrice / 100}</p>
+                      </div>
+                      <div className="">
+                        <button className="absolute bottom-4 right-5 bg-white text-green-600 px-7 py-1 rounded font-bold text-sm shadow-md hover:bg-slate-200">
+                          ADD
+                        </button>
+                      </div>
+                    </div>
+                  )
+                )}
+              </div>
+            </div>
+          )}
 
           <div className="px-4">
             {rData.map(({ card: { card } }) => (
@@ -171,99 +228,116 @@ function MenuCard({ card }) {
     setarrowId((prev) => !prev);
   }
 
-  // console.log(card );
   if (card.itemCards) {
     const { title, itemCards } = card;
-    console.log(card);
     return (
-      <>
-        <div className="flex justify-between text-sm">
-          <h1 className="font-bold">
+      <div className="mb-6">
+        <div
+          className="flex justify-between items-center py-3 cursor-pointer hover:bg-gray-50 rounded-lg px-2 -mx-2"
+          onClick={togglearrow}
+        >
+          <h1 className="font-bold text-lg text-gray-800">
             {title} ({itemCards?.length})
           </h1>
           <i
-            className={`fi fi-br-angle-small-${arrowId ? "up" : "down"}`}
-            onClick={togglearrow}
+            className={`fi fi-br-angle-small-${
+              arrowId ? "up" : "down"
+            } text-gray-600 transition-transform duration-200`}
           ></i>
         </div>
-        {arrowId && <Menu itemCards={itemCards} />}
-        <hr className="border-5 border-slate-200 my-4 rounded-[3px]" />
-      </>
+        {arrowId && (
+          <div className="mt-2">
+            <Menu itemCards={itemCards} />
+          </div>
+        )}
+        <hr className="border-t border-gray-200 my-4" />
+      </div>
     );
   } else {
     const { title, categories } = card;
     return (
-      <>
-        <h1 className="font-bold">{title}</h1>
-        <div className="my-4">
-          {categories.map((data) => (
-            <MenuCard card={data} />
+      <div className="mb-6">
+        <h1 className="font-bold text-lg text-gray-800 mb-4">{title}</h1>
+        <div className="space-y-2">
+          {categories.map((data, index) => (
+            <MenuCard card={data} key={index} />
           ))}
         </div>
-      </>
+      </div>
     );
   }
 }
 
 function Menu({ itemCards }) {
-  console.log(itemCards);
   return (
     <>
       {itemCards.map(
-        ({
-          card: {
-            info: {
-              name,
-              imageId,
-              description,
-              itemAttribute: { vegClassifier },
-              price,
-              ratings: {
-                aggregatedRating: { rating, ratingCountV2 },
+        (
+          {
+            card: {
+              info: {
+                name,
+                imageId,
+                description,
+                itemAttribute: { vegClassifier },
+                price,
+                defaultPrice,
+                ratings: {
+                  aggregatedRating: { rating, ratingCountV2 },
+                },
               },
             },
           },
-        }) => (
-          <div className="border-b flex justify-between py-8">
-            <div className="w-[70%] font-semibold">
-              <div>
+          index
+        ) => (
+          <div
+            className="border-b border-gray-200 flex justify-between py-6 last:border-b-0"
+            key={index}
+          >
+            <div className="w-[70%] pr-4">
+              <div className="mb-2">
                 {vegClassifier === "VEG" ? (
-                  <p>
-                    <img
-                      src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b2/Veg_symbol.svg/800px-Veg_symbol.svg.png"
-                      className="w-4"
-                      alt=""
-                    />
-                  </p>
+                  <img
+                    src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b2/Veg_symbol.svg/800px-Veg_symbol.svg.png"
+                    className="w-4 h-4"
+                    alt="Veg"
+                  />
                 ) : (
-                  <p>
-                    <img
-                      src="https://tse4.mm.bing.net/th/id/OIP.w6vZA1LU2oGl4vbu1Q2BxQHaH0?cb=12&rs=1&pid=ImgDetMain&o=7&rm=3"
-                      alt=""
-                      className="w-4"
-                    />
-                  </p>
+                  <img
+                    src="https://tse4.mm.bing.net/th/id/OIP.w6vZA1LU2oGl4vbu1Q2BxQHaH0?cb=12&rs=1&pid=ImgDetMain&o=7&rm=3"
+                    alt="Non-Veg"
+                    className="w-4 h-4"
+                  />
                 )}
               </div>
-              <p>{name}</p>
-              <p>₹{price / 100}</p>
-              {
-                rating ? <span className="flex gap-1 text-[12px] text-normal">
-                <i className="fi fi-ss-star text-green-600"></i> <p className="text-green-600">{rating}</p>{" "}
-                <p>({ratingCountV2})</p>
-              </span> : ""
-              }
-              
-              <p className="text-slate-700 text-[12px]">{description}</p>
+              <h3 className="font-semibold text-lg text-gray-800 mb-1">
+                {name}
+              </h3>
+              <p className="text-lg font-medium text-gray-900 mb-2">
+                ₹{price / 100 || defaultPrice / 100}
+              </p>
+              {rating && (
+                <div className="flex items-center gap-1 text-sm mb-2">
+                  <i className="fi fi-ss-star text-green-600"></i>
+                  <span className="text-green-600 font-medium">{rating}</span>
+                  <span className="text-gray-500">({ratingCountV2})</span>
+                </div>
+              )}
+              <p className="text-gray-600 text-sm">{description}</p>
             </div>
-            <div className="w-[30%] relative flex justify-center">
-              <div className="flex items-end flex-col">
-
-                <img className= "rounded-xl w-[60%] aspect-square "
+            <div className="w-[30%] flex justify-center">
+              <div className="relative w-40 h-35">
+                <img
+                  className="w-full h-full object-cover rounded-lg"
                   src={`https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_300,h_300,c_fit/${imageId}`}
-                  />
-                  </div>
-                <h1 className="absolute bottom-[-5px] right-[15px] bg-white px-6 py-1 rounded-xl font-bold text-green-600 ">ADD</h1>
+                  alt={name}
+                />
+                <div className="flex justify-center">
+                  <button className="absolute bottom-[-15px] bg-white text-green-600 px-7 py-1.5 rounded font-bold text-md shadow-md hover:bg-slate-200">
+                    ADD
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
         )
