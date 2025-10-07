@@ -183,19 +183,20 @@ function RestaurantMenu() {
                   ({
                     creativeId,
                     dish: {
-                      info: { defaultPrice },
+                      info: { defaultPrice, price },
                     },
                   }) => (
                     <div className="min-w-[240px] relative">
                       <img
                         className=""
-                        src={`https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_292,h_300/${creativeId}`}/>
+                        src={`https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_292,h_300/${creativeId}`}
+                      />
 
                       <div className="absolute bottom-5 text-white font-bold left-2 text-sm ">
-                        <p>₹ {defaultPrice / 100}</p>
+                        <p>₹ {defaultPrice / 100 || price / 100} </p>
                       </div>
                       <div className="">
-                        <button className="absolute bottom-4 right-5 bg-white text-green-600 px-7 py-1 rounded font-bold text-sm shadow-md hover:bg-slate-200">
+                        <button className="absolute bottom-4 right-5 bg-white text-green-600 px-7 py-1 rounded font-bold text-sm shadow-md hover:bg-slate-300">
                           ADD
                         </button>
                       </div>
@@ -250,7 +251,7 @@ function MenuCard({ card }) {
             <Menu itemCards={itemCards} />
           </div>
         )}
-        <hr className="border-t border-gray-200 my-4" />
+        <hr className="border border-gray-200 my-4" />
       </div>
     );
   } else {
@@ -304,7 +305,7 @@ function Menu({ itemCards }) {
                   />
                 ) : (
                   <img
-                    src="https://tse4.mm.bing.net/th/id/OIP.w6vZA1LU2oGl4vbu1Q2BxQHaH0?cb=12&rs=1&pid=ImgDetMain&o=7&rm=3"
+                    src="https://tse4.mm.bing.net/th/id/OIP.w6vZA1LU2oGl4vbu1Q2BxQHaH0?cb=12&rs=1&pid=ImgDetMain&o=7&rm=3" 
                     alt="Non-Veg"
                     className="w-4 h-4"
                   />
@@ -326,7 +327,7 @@ function Menu({ itemCards }) {
               <p className="text-gray-600 text-sm">{description}</p>
             </div>
             <div className="w-[30%] flex justify-center">
-              <div className="relative w-40 h-35">
+              <div className="relative w-32 h-28">
                 <img
                   className="w-full h-full object-cover rounded-lg"
                   src={`https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_300,h_300,c_fit/${imageId}`}
