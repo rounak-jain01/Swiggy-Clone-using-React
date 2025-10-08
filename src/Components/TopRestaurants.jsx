@@ -1,8 +1,11 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import RestaurantCards from "./RestaurantCards";
+import { Coordinates } from "../context/contextAPI";
 
-function TopRestaurants({data}) {
+function TopRestaurants({data, Loc}) {
   const [value, setvalue] = useState(0);
+  const {cords} = useContext(Coordinates)
+  // console.log(cords);
   function moveNext() {
     setvalue((prev) => prev + 500);
   }
@@ -15,7 +18,7 @@ function TopRestaurants({data}) {
     <>
       <div className="flex justify-between mt-8 h-full ">
         <div className="font-extrabold text-[16px]">
-          <h1>Top restaurant chains in Bangalore</h1>
+          <h1>{Loc}</h1>
         </div>
         <div className="flex gap-2">
           <i

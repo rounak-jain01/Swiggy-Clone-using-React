@@ -1,10 +1,12 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Outlet, Link } from "react-router-dom";
-import { Visibility } from "../context/contextAPI";
+import { Visibility, Coordinates } from "../context/contextAPI";
 
 function NavBar() {
   const { visible, setVisible } = useContext(Visibility);
   const [locData, setLocData] = useState([]);
+  const { setcords } = useContext(Coordinates);
+  const [address, setAddress] = useState("");
 
   const navItems = [
     {
@@ -42,14 +44,30 @@ function NavBar() {
   }
 
   async function getLocation(value) {
-    if (value == ""){
-      return
+    if (value == "") {
+      return;
     }
     const response = await fetch(
       `/api/dapi/misc/place-autocomplete?input=${value}`
     );
     const result = await response.json();
     setLocData(result.data);
+  }
+
+  async function getGeoData(placeId) {
+    if (placeId == "") {
+      return;
+    }
+    const response = await fetch(
+      `/api/dapi/misc/address-recommend?place_id=${placeId}`
+    );
+    const result = await response.json();
+    setcords({
+      lat: result.data[0].geometry.location.lat,
+      lng: result.data[0].geometry.location.lng,
+    });
+    // console.log(result.data[0]);
+    setAddress(result.data[0].formatted_address);
   }
 
   return (
@@ -78,10 +96,10 @@ function NavBar() {
           <div>
             <ul>
               {locData.map((data) => (
-                  <li>
-                    <p>{data?.structured_formatting?.main_text}</p>
-                    <p>{data?.structured_formatting?.secondary_text}</p>
-                  </li>
+                <li onClick={() => (getGeoData(data.place_id), handleVisibility())}>
+                  <p>{data?.structured_formatting?.main_text}</p>
+                  <p>{data?.structured_formatting?.secondary_text}</p>
+                </li>
               ))}
             </ul>
           </div>
@@ -101,12 +119,15 @@ function NavBar() {
               </Link>
             </div>
             <div
-              className="cursor-pointer font-bold flex text-[11px] ml-6 border-b-2 hover:text-[#fe5200]"
+              className="flex gap-2 items-center w-[50%]"
               onClick={handlesearchfun}
             >
-              <p className="mb-[2px] ">Other</p>
+              <p>
+                <span className="mb-[2px] font-bold flex text-[11px] ml-6 border-b-2 hover:text-[#fe5200]">Other </span>
+              </p>
+                <p className="text-xs line-clamp-2">{address}</p>
             </div>
-            <div className="text-[#fe5200] ml-3 ">
+            <div className="text-[#fe5200]">
               <i className="fi fi-ss-angle-small-down "></i>
             </div>
           </div>

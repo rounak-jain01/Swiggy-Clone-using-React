@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
+import { Coordinates } from "../context/contextAPI";
 
 function RestaurantMenu() {
   const { id } = useParams();
@@ -8,10 +9,12 @@ function RestaurantMenu() {
   const [rData, setrData] = useState([]);
   const [TopPicks, setTopPicks] = useState(null);
   const [value, setvalue] = useState(0);
+  const {cords:{lat, lng}} = useContext(Coordinates);
+  
 
   async function fetchRestData() {
     const data = await fetch(
-      `/api/dapi/menu/pl?page-type=REGULAR_MENU&complete-menu=true&lat=12.97530&lng=77.59100&restaurantId=${id
+      `/api/dapi/menu/pl?page-type=REGULAR_MENU&complete-menu=true&lat=${lat}&lng=${lng}&restaurantId=${id
         .split("-")
         .at(-1)
         .split("t")
