@@ -1,6 +1,8 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { Coordinates } from "../context/contextAPI";
+import { CartValue } from "../context/contextAPI";
+
 
 function RestaurantMenu() {
   const { id } = useParams();
@@ -9,8 +11,9 @@ function RestaurantMenu() {
   const [rData, setrData] = useState([]);
   const [TopPicks, setTopPicks] = useState(null);
   const [value, setvalue] = useState(0);
-  const {cords:{lat, lng}} = useContext(Coordinates);
-  
+  const {
+    cords: { lat, lng },
+  } = useContext(Coordinates);
 
   async function fetchRestData() {
     const data = await fetch(
@@ -273,27 +276,38 @@ function MenuCard({ card }) {
 }
 
 function Menu({ itemCards }) {
+        const {cartData, setCartData} = useContext(CartValue);
+
   return (
     <>
-      {itemCards.map(
-        (
-          {
-            card: {
-              info: {
-                name,
-                imageId,
-                description,
-                itemAttribute: { vegClassifier },
-                price,
-                defaultPrice,
-                ratings: {
-                  aggregatedRating: { rating, ratingCountV2 },
-                },
-              },
-            },
+      {itemCards.map(({ card: { info } }, index) => {
+        const {
+          name,
+          imageId,
+          description,
+          itemAttribute: { vegClassifier },
+          price,
+          defaultPrice,
+          ratings: {
+            aggregatedRating: { rating, ratingCountV2 },
           },
-          index
-        ) => (
+        } = info;
+
+
+        function addToCart() {
+          const isAdded = cartData.find((data) => data.id === info.id)
+          if(!isAdded){
+
+            setCartData((prev) => [...prev, info]);
+          }
+          else{
+            alert("Item is Already Added")
+          }
+
+          
+
+        }
+        return (
           <div
             className="border-b border-gray-200 flex justify-between py-6 last:border-b-0"
             key={index}
@@ -308,7 +322,7 @@ function Menu({ itemCards }) {
                   />
                 ) : (
                   <img
-                    src="https://tse4.mm.bing.net/th/id/OIP.w6vZA1LU2oGl4vbu1Q2BxQHaH0?cb=12&rs=1&pid=ImgDetMain&o=7&rm=3" 
+                    src="https://tse4.mm.bing.net/th/id/OIP.w6vZA1LU2oGl4vbu1Q2BxQHaH0?cb=12&rs=1&pid=ImgDetMain&o=7&rm=3"
                     alt="Non-Veg"
                     className="w-4 h-4"
                   />
@@ -327,7 +341,9 @@ function Menu({ itemCards }) {
                   <span className="text-gray-500">({ratingCountV2})</span>
                 </div>
               )}
-              <p className="text-gray-600 text-sm">{description}</p>
+              <p className="text-gray-600 text-sm line-clamp-3">
+                {description}
+              </p>
             </div>
             <div className="w-[30%] flex justify-center">
               <div className="relative w-32 h-28">
@@ -337,15 +353,18 @@ function Menu({ itemCards }) {
                   alt={name}
                 />
                 <div className="flex justify-center">
-                  <button className="absolute bottom-[-15px] bg-white text-green-600 px-7 py-1.5 rounded font-bold text-md shadow-md hover:bg-slate-200">
+                  <button
+                    className="absolute bottom-[-15px] bg-white text-green-600 px-7 py-1.5 rounded font-bold text-md shadow-md hover:bg-slate-200"
+                    onClick={addToCart}
+                  >
                     ADD
                   </button>
                 </div>
               </div>
             </div>
           </div>
-        )
-      )}
+        );
+      })}
     </>
   );
 }

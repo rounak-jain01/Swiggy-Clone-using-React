@@ -1,37 +1,44 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Outlet, Link } from "react-router-dom";
-import { Visibility, Coordinates } from "../context/contextAPI";
+import { Visibility, Coordinates, CartValue } from "../context/contextAPI";
 
 function NavBar() {
   const { visible, setVisible } = useContext(Visibility);
   const [locData, setLocData] = useState([]);
   const { setcords } = useContext(Coordinates);
   const [address, setAddress] = useState("");
+  const {cartData, setCardData} = useContext(CartValue);
 
   const navItems = [
     {
       Name: "Swiggy Corporate",
       Icon: "fi-rs-shopping-bag",
+      path: "/Corporate"
     },
     {
       Name: "Search",
       Icon: "fi-br-search",
+      path: "/Search"
     },
     {
       Name: "Offers",
       Icon: "fi-rr-badge-percent",
+      path: "/Offers"
     },
     {
       Name: "Help",
       Icon: "fi-sr-life-ring",
+      path: "/Help"
     },
     {
       Name: "Sign in",
       Icon: "fi-rs-user",
+      path: "/SignIn"
     },
     {
       Name: "Cart",
       Icon: "fi-br-shopping-cart",
+      path: "/Cart"
     },
   ];
 
@@ -80,28 +87,50 @@ function NavBar() {
           }`}
         ></div>
         <div
-          className={`bg-white w-[35%] h-full z-40 duration-400 absolute ${
+          className={`flex flex-col  items-end  bg-white w-[38%] h-full z-40 duration-400 absolute ${
             visible ? "left-0" : "-left-[100%]"
           }`}
         >
-          <p>
-            <i className="fi fi-br-cross-small" onClick={handleVisibility}></i>
-          </p>
-          <input
-            className="focus:font-bold py-3 text-sm px-4 w-[60%] border border-slate-300 focus:outline-none focus:shadow-lg "
-            type="text"
-            placeholder="Search for area, street name..."
-            onChange={(e) => getLocation(e.target.value)}
-          />
-          <div>
-            <ul>
-              {locData.map((data) => (
-                <li onClick={() => (getGeoData(data.place_id), handleVisibility())}>
-                  <p>{data?.structured_formatting?.main_text}</p>
-                  <p>{data?.structured_formatting?.secondary_text}</p>
-                </li>
-              ))}
-            </ul>
+          <div className="mt-5 flex flex-col gap-5  w-[65%] mr-10 ">
+            <p>
+              <i
+                className="fi fi-br-cross-small text-xl"
+                onClick={handleVisibility}
+              ></i>
+            </p>
+            <input
+              className="focus:font-bold py-3 text-sm px-4 border border-slate-300 focus:outline-none focus:shadow-lg "
+              type="text"
+              placeholder="Search for area, street name..."
+              onChange={(e) => getLocation(e.target.value)}
+            />
+            <div>
+              <ul>
+                {locData.map((data) => (
+                  <div className="flex  px-2 gap-2 cursor-pointer">
+                    <div>
+                      <i className="fi fi-rs-marker text-xl"></i>
+                    </div>
+                    <div className="w-full ">
+                      <li
+                        onClick={() => (
+                          getGeoData(data.place_id), handleVisibility()
+                        )}
+                        className="flex flex-col gap-0.5 justify-center "
+                      >
+                        <p className="text-xs font-bold hover:text-[#fe5200]">
+                          {data?.structured_formatting?.main_text}
+                        </p>
+                        <p className="text-[9px] text-slate-500">
+                          {data?.structured_formatting?.secondary_text}
+                        </p>
+                      </li>
+                        <hr className="my-3" />
+                    </div>
+                  </div>
+                ))}
+              </ul>
+            </div>
           </div>
         </div>
       </div>
@@ -123,9 +152,11 @@ function NavBar() {
               onClick={handlesearchfun}
             >
               <p>
-                <span className="mb-[2px] font-bold flex text-[11px] ml-6 border-b-2 hover:text-[#fe5200]">Other </span>
+                <span className="mb-[2px] font-bold flex text-[11px] ml-6 border-b-2 hover:text-[#fe5200]">
+                  Other{" "}
+                </span>
               </p>
-                <p className="text-xs line-clamp-2">{address}</p>
+              <p className="text-xs line-clamp-2">{address}</p>
             </div>
             <div className="text-[#fe5200]">
               <i className="fi fi-ss-angle-small-down "></i>
@@ -134,13 +165,19 @@ function NavBar() {
 
           <div className="flex  h-[100%] items-center w-[63%] justify-between font-bold text-[13px] ">
             {navItems.map((item, i) => (
+              <Link to={item.path}>
               <div
                 key={i}
                 className="flex gap-2 items-center hover:text-[#fe5200]"
               >
                 <i className={`fi ${item.Icon}`}></i>
                 <p className="mb-[2px]">{item.Name}</p>
+                {
+                  item.Name == "Cart" && <p>{cartData.length}</p>
+                }
+                
               </div>
+                </Link>
             ))}
           </div>
         </div>
